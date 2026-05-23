@@ -1,109 +1,42 @@
-# GT Arcade Pico Pro Calibration V3.2
+# GT ARCADE KONTROL IO BOARD V0.01
 
-Bu sürüm sadeleştirilmiş profesyonel sürümdür.
+Bu proje, TeknoParrot / Far Cry Paradise Lost tarzı arcade lightgun sistemi için hazırlanmış **iki Pico destekli profesyonel kontrol kartı projesidir**.
 
-## Ana özellikler
+## Ana hedef
 
-- 2 oyuncu için 2 ayrı Pico desteği
-- P1 ve P2 cihaz adları ayrı görünür
-- 4 köşe potans kalibrasyonu
-- Orta nokta kalibrasyonu yoktur
-- Buton test ekranında GP numarası yazmaz, görev isimleri yazar
-- **Titreşimi Azalt** menüsü sade sürgülüdür
-- İvme ayarı yoktur
-- GP20 sistem aktif / pasif olarak çalışır
+- 2 oyuncu olacak.
+- 2 adet Raspberry Pi Pico kullanılacak.
+- Her oyuncunun Pico'su ayrı cihaz adıyla görünecek.
+- Player 1 ve Player 2 tetik, bomba, reload, coin, start ve nişangah hareketleri birbirine karışmayacak.
+- Kalibrasyon TeknoParrot menüsünden değil, bizim PC programımızdan yapılacak.
+- GP19'a basınca ilgili oyuncunun kalibrasyon ekranı açılacak.
+- Kalibrasyonda mouse ile butona gitmek yok. GP6 ile köşe kaydedilecek.
+- GP20 sistem aktif / pasif olacak.
 
-## UF2 dosyaları
+## Klasörler
 
-GitHub Actions derleme sonunda şu dosyalar oluşur:
-
-- `gt_arcade_pico_p1_pro_v32.uf2`
-- `gt_arcade_pico_p2_pro_v32.uf2`
-
-## GP20 sistem aktif / pasif
-
-GP20 basılı değilse silah kontrolleri pasif olur:
-
-- Potans nişangahı hareket ettirmez
-- Tetik çalışmaz
-- Bomba çalışmaz
-- Reload çalışmaz
-- Klavye tuş gönderimi kapalı olur
-
-GP20 basılıyken sistem aktif olur:
-
-- Potans nişangahı hareket ettirir
-- GP7 tetik çalışır
-- GP8 reload çalışır
-- GP6 bomba/select çalışır
-- Menü/start/coin tuşları gönderilir
-
-Not: GP19 kalibrasyon sinyali PC programına yine gönderilir. Böylece program açıkken kalibrasyon ekranı açılabilir.
-
-## Pin listesi
-
-- GP26 = X potans
-- GP27 = Y potans
-- GP20 = Sistem aktif / pasif
-- GP7 = Tetik
-- GP8 = Jarjör değiştir / Reload
-- GP6 = Bomba + Menü Select / Enter
-- GP2 = Menü yukarı
-- GP3 = Menü aşağı
-- GP4 = Menü sol
-- GP5 = Menü sağ
-- GP17 = Coin / Kredi
-- GP18 = Start
-- GP19 = Test / Kalibrasyon
-
-## Bağlantı
-
-Bütün butonlar:
-
-`GP pini -> Buton -> GND`
-
-Potans:
-
-- Orta uç -> GP26 veya GP27
-- Bir dış uç -> 3V3
-- Diğer dış uç -> GND
-
-## PC programını çalıştırma
-
-`pc_app` klasöründe CMD açıp şunu yaz:
-
-```bat
-python gt_arcade_calibration_v32.py
+```text
+firmware/  = Pico P1/P2 firmware kaynakları ve GitHub Actions derleme yapısı
+pc_app/    = Windows masaüstü kalibrasyon/test programı
+docs/      = pin listesi, klavye karşılıkları, yapılacak/yapılmayacaklar
+tools/     = kolay başlatma ve başlangıca ekleme BAT dosyaları
 ```
 
-Olmazsa:
+## Çıkacak UF2 dosyaları
 
-```bat
-py gt_arcade_calibration_v32.py
+GitHub Actions ile derleme sonunda iki UF2 oluşması hedeflenir:
+
+```text
+gt_arcade_kontrol_io_p1_v001.uf2
+gt_arcade_kontrol_io_p2_v001.uf2
 ```
 
-## Program bölümleri
+## Önemli not
 
-1. Potans Kalibrasyonu
-2. Canlı Nişangah Testi
-3. Buton Testi
-4. Titreşimi Azalt
+GP19 ile kalibrasyon ekranının otomatik açılması için PC programı arka planda açık olmalıdır. Windows açılışında otomatik başlatmak için:
 
-## Titreşimi Azalt
+```text
+tools/BASLANGICA_EKLE.bat
+```
 
-Programda sadece sade bir sürgü vardır:
-
-`Az  ----  Çok`
-
-Sağa artırırsan titreme azalır. Çok artırırsan tepki biraz yumuşar.
-
-## Kalibrasyon
-
-Kalibrasyon 4 köşedir:
-
-1. Sol üst
-2. Sağ üst
-3. Sağ alt
-4. Sol alt
-
-Her köşede silahı hedefe çevirip `KÖŞEYİ KAYDET` veya GP6 ile kayıt yapılır. Sonra `KAYDET VE ÇIK` ile ayar Pico'ya gönderilir ve ekran kapanır.
+çalıştırılabilir.

@@ -1,0 +1,18 @@
+cmake_minimum_required(VERSION 3.13)
+include(pico_sdk_import.cmake)
+project(gt_arcade_kontrol_io_board_v001 C CXX ASM)
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+pico_sdk_init()
+
+add_executable(gt_arcade_kontrol_io_p1_v001 src/main.c src/usb_descriptors.c)
+target_compile_definitions(gt_arcade_kontrol_io_p1_v001 PRIVATE PLAYER_ID=1 USB_PRODUCT="GT Arcade Kontrol IO P1 V001")
+target_include_directories(gt_arcade_kontrol_io_p1_v001 PRIVATE src)
+target_link_libraries(gt_arcade_kontrol_io_p1_v001 pico_stdlib tinyusb_device tinyusb_board hardware_adc hardware_flash)
+pico_add_extra_outputs(gt_arcade_kontrol_io_p1_v001)
+
+add_executable(gt_arcade_kontrol_io_p2_v001 src/main.c src/usb_descriptors.c)
+target_compile_definitions(gt_arcade_kontrol_io_p2_v001 PRIVATE PLAYER_ID=2 USB_PRODUCT="GT Arcade Kontrol IO P2 V001")
+target_include_directories(gt_arcade_kontrol_io_p2_v001 PRIVATE src)
+target_link_libraries(gt_arcade_kontrol_io_p2_v001 pico_stdlib tinyusb_device tinyusb_board hardware_adc hardware_flash)
+pico_add_extra_outputs(gt_arcade_kontrol_io_p2_v001)
