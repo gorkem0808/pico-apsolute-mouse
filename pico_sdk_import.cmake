@@ -1,9 +1,18 @@
-# This is a copy-compatible Pico SDK import helper.
+# This is a copy of the standard pico_sdk_import.cmake helper.
+# It expects PICO_SDK_PATH to be set by GitHub Actions or your local environment.
 if (DEFINED ENV{PICO_SDK_PATH} AND (NOT PICO_SDK_PATH))
     set(PICO_SDK_PATH $ENV{PICO_SDK_PATH})
-endif()
+endif ()
+
 if (NOT PICO_SDK_PATH)
-    message(FATAL_ERROR "PICO_SDK_PATH is not set. In GitHub Actions this is set automatically.")
-endif()
+    message(FATAL_ERROR "PICO_SDK_PATH not set")
+endif ()
+
 get_filename_component(PICO_SDK_PATH "${PICO_SDK_PATH}" REALPATH BASE_DIR "${CMAKE_BINARY_DIR}")
-include(${PICO_SDK_PATH}/external/pico_sdk_import.cmake)
+set(PICO_SDK_INIT_CMAKE_FILE ${PICO_SDK_PATH}/pico_sdk_init.cmake)
+
+if (NOT EXISTS ${PICO_SDK_INIT_CMAKE_FILE})
+    message(FATAL_ERROR "pico_sdk_init.cmake not found in PICO_SDK_PATH=${PICO_SDK_PATH}")
+endif ()
+
+include(${PICO_SDK_INIT_CMAKE_FILE})

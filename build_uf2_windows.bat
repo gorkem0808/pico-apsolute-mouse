@@ -1,20 +1,12 @@
 @echo off
-setlocal
-where cmake >nul 2>nul
-if errorlevel 1 (
-  echo CMake bulunamadi. GitHub Actions ile derlemek daha kolay.
-  pause
-  exit /b 1
-)
+echo GT Arcade Pico Pro V3 local build
 if "%PICO_SDK_PATH%"=="" (
-  echo PICO_SDK_PATH ayari yok. GitHub Actions ile derlemek daha kolay.
+  echo HATA: PICO_SDK_PATH ayarli degil. En kolay yol GitHub Actions kullanmak.
   pause
   exit /b 1
 )
-mkdir build 2>nul
+if not exist build mkdir build
 cd build
-cmake .. -G "NMake Makefiles"
-cmake --build .
-echo.
-echo UF2 burada olmali: build\pico_absolute_mouse.uf2
+cmake .. -DPICO_SDK_PATH=%PICO_SDK_PATH%
+cmake --build . -j 2
 pause
