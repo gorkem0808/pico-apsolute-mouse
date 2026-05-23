@@ -1,0 +1,38 @@
+name: Build Pico UF2
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "ana", "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt update
+          sudo apt install -y cmake gcc-arm-none-eabi libnewlib-arm-none-eabi build-essential git python3
+
+      - name: Download Pico SDK
+        run: |
+          git clone --depth 1 https://github.com/raspberrypi/pico-sdk.git
+          cd pico-sdk
+          git submodule update --init
+
+      - name: Build UF2
+        run: |
+          mkdir build
+          cd build
+          cmake .. -DPICO_SDK_PATH=$GITHUB_WORKSPACE/pico-sdk
+          make -j2
+
+      - name: Upload UF2
+        uses: actions/upload-artifact@v4
+        with:
+          name: pico_absolute_mouse_uf2
+          path: build/*.uf2
