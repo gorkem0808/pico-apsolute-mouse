@@ -1,0 +1,56 @@
+GT ARCADE PICO PRO V3.2 - PIN VE KLAVYE KARŞILIKLARI
+
+PROGRAMDA GP NUMARALARI GÖRÜNMEZ. PROGRAMDA SADECE GÖREV İSİMLERİ GÖRÜNÜR.
+
+PİN LİSTESİ:
+
+GP26 = X potans
+GP27 = Y potans
+GP20 = Sistem aktif / pasif
+
+GP7  = Tetik
+GP8  = Jarjör değiştir / Reload
+GP6  = Bomba + Menü Select / Enter
+
+GP2  = Menü yukarı
+GP3  = Menü aşağı
+GP4  = Menü sol
+GP5  = Menü sağ
+
+GP17 = Coin / Kredi
+GP18 = Start
+GP19 = Test / Kalibrasyon
+
+BAĞLANTI:
+
+Bütün butonlar:
+GP pini -> Buton -> GND
+
+Potans:
+Orta uç -> GP26 veya GP27
+Bir dış uç -> 3V3
+Diğer dış uç -> GND
+
+KLAVYE KARŞILIKLARI:
+
+PLAYER 1:
+Tetik = Mouse Left Button
+Jarjör değiştir = R
+Bomba / Select = Space
+Menü yukarı = Up Arrow
+Menü aşağı = Down Arrow
+Menü sol = Left Arrow
+Menü sağ = Right Arrow
+P1 Coin = NumPad 5
+P1 Start = NumPad 1
+Test / Servis = NumPad 7
+
+PLAYER 2:
+Tetik = Mouse Left Button
+Jarjör değiştir = T
+Bomba = Right Ctrl
+P2 Coin = NumPad 6
+P2 Start = NumPad 2
+
+NOT:
+GP20 basılı değilse silah kontrolleri pasiftir.

@@ -1,118 +1,109 @@
-# GT Arcade Pico Pro Calibration V3
+# GT Arcade Pico Pro Calibration V3.2
 
-Bu paket TeknoParrot / Paradise Lost tarzı 2 oyunculu potansiyometreli arcade silah sistemi içindir.
+Bu sürüm sadeleştirilmiş profesyonel sürümdür.
 
-## Sistem
+## Ana özellikler
 
-- 2 oyuncu için 2 adet Raspberry Pi Pico kullanılır.
-- Pico 1 cihaz adı: `GT Arcade Pico P1 Pro Gun`
-- Pico 2 cihaz adı: `GT Arcade Pico P2 Pro Gun`
-- Her Pico hem HID absolute mouse hem de keyboard/serial cihazı gibi çalışır.
-- PC kalibrasyon programı açıkken GP19 butonuna basınca kalibrasyon ekranı otomatik açılır.
-- Kalibrasyon 4 köşedir. Orta nokta yoktur.
+- 2 oyuncu için 2 ayrı Pico desteği
+- P1 ve P2 cihaz adları ayrı görünür
+- 4 köşe potans kalibrasyonu
+- Orta nokta kalibrasyonu yoktur
+- Buton test ekranında GP numarası yazmaz, görev isimleri yazar
+- **Titreşimi Azalt** menüsü sade sürgülüdür
+- İvme ayarı yoktur
+- GP20 sistem aktif / pasif olarak çalışır
+
+## UF2 dosyaları
+
+GitHub Actions derleme sonunda şu dosyalar oluşur:
+
+- `gt_arcade_pico_p1_pro_v32.uf2`
+- `gt_arcade_pico_p2_pro_v32.uf2`
+
+## GP20 sistem aktif / pasif
+
+GP20 basılı değilse silah kontrolleri pasif olur:
+
+- Potans nişangahı hareket ettirmez
+- Tetik çalışmaz
+- Bomba çalışmaz
+- Reload çalışmaz
+- Klavye tuş gönderimi kapalı olur
+
+GP20 basılıyken sistem aktif olur:
+
+- Potans nişangahı hareket ettirir
+- GP7 tetik çalışır
+- GP8 reload çalışır
+- GP6 bomba/select çalışır
+- Menü/start/coin tuşları gönderilir
+
+Not: GP19 kalibrasyon sinyali PC programına yine gönderilir. Böylece program açıkken kalibrasyon ekranı açılabilir.
 
 ## Pin listesi
 
-| Görev | Pin |
-|---|---|
-| X potans orta uç | GP26 |
-| Y potans orta uç | GP27 |
-| Nişangah aktif | GP20 |
-| Tetik | GP7 |
-| Jarjör değiştir / Reload | GP8 |
-| Bomba + Menü Select / Enter | GP6 |
-| Menü yukarı | GP2 |
-| Menü aşağı | GP3 |
-| Menü sol | GP4 |
-| Menü sağ | GP5 |
-| Coin / Kredi | GP17 |
-| Start | GP18 |
-| Test / Kalibrasyon | GP19 |
+- GP26 = X potans
+- GP27 = Y potans
+- GP20 = Sistem aktif / pasif
+- GP7 = Tetik
+- GP8 = Jarjör değiştir / Reload
+- GP6 = Bomba + Menü Select / Enter
+- GP2 = Menü yukarı
+- GP3 = Menü aşağı
+- GP4 = Menü sol
+- GP5 = Menü sağ
+- GP17 = Coin / Kredi
+- GP18 = Start
+- GP19 = Test / Kalibrasyon
 
-Bütün butonların bağlantısı aynıdır:
+## Bağlantı
 
-```text
-GP pini → buton → GND
+Bütün butonlar:
+
+`GP pini -> Buton -> GND`
+
+Potans:
+
+- Orta uç -> GP26 veya GP27
+- Bir dış uç -> 3V3
+- Diğer dış uç -> GND
+
+## PC programını çalıştırma
+
+`pc_app` klasöründe CMD açıp şunu yaz:
+
+```bat
+python gt_arcade_calibration_v32.py
 ```
 
-Potans bağlantısı:
+Olmazsa:
 
-```text
-Potans orta uç → GP26 veya GP27
-Potans dış uç  → 3V3
-Potans diğer dış uç → GND
+```bat
+py gt_arcade_calibration_v32.py
 ```
 
-## Klavye karşılıkları
+## Program bölümleri
 
-### Ortak
+1. Potans Kalibrasyonu
+2. Canlı Nişangah Testi
+3. Buton Testi
+4. Titreşimi Azalt
 
-| Görev | Klavye / Mouse karşılığı |
-|---|---|
-| Tetik | Mouse Left Button |
-| Bomba / Select | Space + Mouse Right Button |
-| Menü yukarı | Up Arrow |
-| Menü aşağı | Down Arrow |
-| Menü sol | Left Arrow |
-| Menü sağ | Right Arrow |
-| Test / Servis | NumPad 7 |
+## Titreşimi Azalt
 
-### Player 1
+Programda sadece sade bir sürgü vardır:
 
-| Görev | Karşılık |
-|---|---|
-| Reload | R |
-| Coin | NumPad 5 |
-| Start | NumPad 1 |
+`Az  ----  Çok`
 
-### Player 2
-
-| Görev | Karşılık |
-|---|---|
-| Reload | T |
-| Coin | NumPad 6 |
-| Start | NumPad 2 |
+Sağa artırırsan titreme azalır. Çok artırırsan tepki biraz yumuşar.
 
 ## Kalibrasyon
 
-1. `pc_app/gt_arcade_calibration_v3.py` programını aç.
-2. Pico bağlıyken program P1/P2 cihazlarını görecek.
-3. Pico üzerinde `GP19` test/kalibrasyon butonuna bas.
-4. Program tam ekran kalibrasyon ekranını açar.
-5. Sırayla 4 köşe çıkar:
-   - Sol üst
-   - Sağ üst
-   - Sağ alt
-   - Sol alt
-6. Her köşede silahı hedefe çevir ve `GP6` Bomba/Seç butonuna bas.
-7. 4 köşe bitince program ayarı Pico içine kaydeder ve ekran kapanır.
+Kalibrasyon 4 köşedir:
 
-## PC programı
+1. Sol üst
+2. Sağ üst
+3. Sağ alt
+4. Sol alt
 
-Python ile çalışır. Gerekli modül:
-
-```text
-pip install -r pc_app/requirements.txt
-```
-
-Sonra:
-
-```text
-python pc_app/gt_arcade_calibration_v3.py
-```
-
-İleride bu program EXE yapılabilir.
-
-## GitHub Actions ile UF2 üretme
-
-1. Bu klasördeki dosyaları GitHub reposuna yükle.
-2. Actions sekmesine gir.
-3. `Build GT Arcade Pico Pro V3 UF2` işlemini çalıştır.
-4. Artifact içinden şu dosyalar çıkar:
-
-```text
-gt_arcade_pico_p1_pro_v3.uf2
-gt_arcade_pico_p2_pro_v3.uf2
-```
-
-Pico 1'e P1 UF2, Pico 2'ye P2 UF2 atılır.
+Her köşede silahı hedefe çevirip `KÖŞEYİ KAYDET` veya GP6 ile kayıt yapılır. Sonra `KAYDET VE ÇIK` ile ayar Pico'ya gönderilir ve ekran kapanır.
